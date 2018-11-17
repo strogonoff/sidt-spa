@@ -1,6 +1,7 @@
 import { from, BehaviorSubject } from 'rxjs';
 
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { Inject, Component, OnInit, Input, HostBinding, EventEmitter, Output } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Stream } from '@bt/stream';
 import { Request, RequestStatus } from '@bt/request';
@@ -36,7 +37,7 @@ import { DataService } from '@bt/data.service';
                 <button
                   mat-stroked-button
                   color="primary"
-                  (click)="request.emit({ confirmed: true })">
+                  (click)="onPlaceRequest()">
                   Ask to buy
                 </button>
               </div>
@@ -103,6 +104,9 @@ import { DataService } from '@bt/data.service';
 export class StreamRowComponent implements OnInit {
   @Input() stream: Stream;
   @HostBinding('class.enabled') enabled: boolean = false;
+  @Output() request = new EventEmitter<boolean>(true);
+
+  private newRequest = new Request();
 
   requestStatus = RequestStatus;
 
@@ -112,7 +116,7 @@ export class StreamRowComponent implements OnInit {
   responseSets = new BehaviorSubject<ResponseSet[]>([]);
   requests = new BehaviorSubject<Request[]>([]);
 
-  constructor(private data: DataService) {}
+  constructor(private data: DataService, private matDialog: MatDialog) {}
 
   async ngOnInit() {
     this.enabled = this.stream.enabled;
@@ -135,4 +139,87 @@ export class StreamRowComponent implements OnInit {
     this.totalCustomerCount = await this.data.getTotalCustomerCount().toPromise();
     return 100 / this.totalCustomerCount * this.stream.insureesTracking;
   }
+
+
+  /* Placing new request shit */
+
+  onPlaceRequest(): void {
+    this.newRequest.streamName = this.stream.name;
+    this.newRequest.spendTokens = 0;
+
+    const dialogRef = this.matDialog.open(DataRequestDialog, {
+      minWidth: '70vw',
+      data: { requestDraft: this.newRequest },
+    });
+
+    dialogRef.afterClosed().subscribe((request: Request) => {
+      if (request) {
+        this.data.requestData(this.stream.name, request.targetSampleSize, request.spendTokens).
+        subscribe(data => {
+          // Reset proof draft
+          this.newRequest = new Request();
+          this.newRequest.streamName = this.stream.name;
+          this.newRequest.spendTokens = 0;
+        });
+      }
+    });
+  }
+}
+
+
+
+
+@Component({
+  template: `
+    <h1 mat-dialog-title>
+      Offer to purchase data: {{ data.requestDraft.streamName }}
+    </h1>
+    <mat-dialog-content>
+      <mat-form-field>
+        <input matInput
+          type="number"
+          required
+          (ngModelChange)="targetSampleSizeChanged($event)"
+          [(ngModel)]="data.requestDraft.targetSampleSize"
+          placeholder="Target sample size">
+        <mat-hint>Cost: {{ data.requestDraft.spendTokens }} tokens</mat-hint>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button
+        mat-button
+        (click)="onNoClick()">Close</button>
+      <button
+        mat-raised-button
+        color="primary"
+        [mat-dialog-close]="data.requestDraft"
+        [disabled]="data.requestDraft.targetSampleSize == ''"
+        cdkFocusInitial>Request data purchase</button>
+    </mat-dialog-actions>
+  `,
+  styles: [`
+    mat-dialog-content {
+      display: flex;
+      flex-flow: column nowrap;
+    }
+  `],
+})
+export class DataRequestDialog {
+  constructor(
+    private dataSvc: DataService,
+    private dialogRef: MatDialogRef<DataRequestDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: { requestDraft: Request }) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  targetSampleSizeChanged($event): void {
+    console.debug(`Checking cost for ${event}`);
+    this.dataSvc.getRequestCost(this.data.requestDraft.streamName, $event).subscribe(({ cost }) => {
+      console.debug(`Got ${cost}`);
+      this.data.requestDraft.spendTokens = cost;
+    });
+  }
+
 }

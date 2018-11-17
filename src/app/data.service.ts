@@ -17,6 +17,14 @@ const ENDPOINT = '';
 export class DataService {
   constructor(private http: HttpClient) {}
 
+  requestData(
+      streamName: string,
+      targetSampleSize: number,
+      spendTokens: number): Observable<{ ok: boolean }> {
+    console.debug(`woulda spent ${spendTokens} tokens to get ${streamName} for ${targetSampleSize} mortals!`);
+    return of({ ok: true }).pipe(delay(1000));
+  }
+
   getStreams(): Observable<Stream[]> {
     return of([
       Stream.fromResp({
@@ -53,6 +61,7 @@ export class DataService {
         streamName: 'Steps',
         timestamp: 'Today',
         targetSampleSize: 2000,
+        spendTokens: 40,
       }),
     ]).pipe(delay(300));
   }
@@ -66,5 +75,9 @@ export class DataService {
         csvPath: 'https://www.google.com/',
       }),
     ]).pipe(delay(200));
+  }
+
+  getRequestCost(streamName: string, targetSampleSize: number): Observable<{ cost: number }> {
+    return of({ cost: 40 }).pipe(delay(1000));
   }
 }

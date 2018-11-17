@@ -9,6 +9,7 @@ export class Request {
   status: RequestStatus;
   timestamp: string;
   targetSampleSize: number;
+  spendTokens: number;
 
   public static fromResp(data: any): Request {
     let obj = new Request();
@@ -19,6 +20,7 @@ export class Request {
     console.debug(obj.status);
     obj.timestamp = data.timestamp;
     obj.targetSampleSize = data.targetSampleSize;
+    obj.spendTokens = data.spendTokens;
 
     return obj;
   }

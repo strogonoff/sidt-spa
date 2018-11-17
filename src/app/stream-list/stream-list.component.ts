@@ -12,7 +12,7 @@ import { DataService } from '@bt/data.service';
       <bt-stream-row
         *ngFor="let stream of streamsObservable | async as streams; index as i; first as isFirst"
         (click)="selectedStream = stream"
-        (request)="requestStream(stream, $event.confirmed)"
+        (request)="requestData(stream)"
         [stream]="stream"></bt-stream-row>
     </mat-accordion>
   `,
@@ -30,7 +30,7 @@ export class StreamListComponent implements OnInit {
     });
   }
 
-  requestStream(stream, confirmed) {
+  requestData(stream, confirmed) {
     console.debug(stream, confirmed);
   }
 
