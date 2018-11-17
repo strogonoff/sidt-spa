@@ -5,7 +5,7 @@
    build:
      stage: build
      image: node:latest
-     before_script:
+     script:
      - npm install
      - ng build --prod
      artifacts:
