@@ -146,6 +146,7 @@ export class StreamRowComponent implements OnInit {
   onPlaceRequest(): void {
     this.newRequest.streamName = this.stream.name;
     this.newRequest.spendTokens = 0;
+    this.newRequest.targetSampleSize = 0;
 
     const dialogRef = this.matDialog.open(DataRequestDialog, {
       minWidth: '70vw',
@@ -160,6 +161,7 @@ export class StreamRowComponent implements OnInit {
           this.newRequest = new Request();
           this.newRequest.streamName = this.stream.name;
           this.newRequest.spendTokens = 0;
+          this.newRequest.targetSampleSize = 0;
         });
       }
     });
@@ -193,7 +195,7 @@ export class StreamRowComponent implements OnInit {
         mat-raised-button
         color="primary"
         [mat-dialog-close]="data.requestDraft"
-        [disabled]="data.requestDraft.targetSampleSize == ''"
+        [disabled]="data.requestDraft.targetSampleSize == 0"
         cdkFocusInitial>Request data purchase</button>
     </mat-dialog-actions>
   `,
