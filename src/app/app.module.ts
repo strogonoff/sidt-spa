@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { AdalService, AdalInterceptor } from 'adal-angular4';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -15,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { AuthGuard } from './auth.guard';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StreamListComponent } from './stream-list/stream-list.component';
@@ -22,11 +26,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { BuyTokenComponent } from './buy-token/buy-token.component';
 import { StreamRowComponent, DataRequestDialog } from './stream-list/stream-row.component';
 import { TopbarComponent } from './topbar/topbar.component';
+import { AuthCallbackComponent } from './auth-callback.component';
 
 
 const appRoutes: Routes = [
-  { path: '', component: StreamListComponent },
-  { path: 'buy-token', component: BuyTokenComponent },
+  { path: '', component: StreamListComponent, canActivate: [AuthGuard] },
+  { path: 'auth', component: AuthCallbackComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -39,6 +44,7 @@ const appRoutes: Routes = [
     StreamRowComponent,
     TopbarComponent,
     DataRequestDialog,
+    AuthCallbackComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +66,10 @@ const appRoutes: Routes = [
     MatDialogModule,
     MatInputModule,
   ],
-  providers: [],
+  providers: [
+    AdalService,
+    { provide: HTTP_INTERCEPTORS, useClass: AdalInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     DataRequestDialog,
