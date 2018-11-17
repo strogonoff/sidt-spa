@@ -18,12 +18,12 @@ import { AdalService } from 'adal-angular4';
 })
 export class AppComponent {
   private adalConfig = {
-    tenant: '[TENANT_GUID]',
-    clientId: '[CLIENTID_GUID]',
-    redirectUri: "[LOGIN_REDIRECT_URL]",
-    postLogoutRedirectUri: "[POST_LOGOUT_REDIRECT_URL]",
+    tenant: '11b2210f-a3ad-413c-b239-8be48126b4a6',
+    clientId: '7abc1508-6c60-4b3a-8e24-ddd623894bd0',
+    redirectUri: "http://sidt.dev.anton.strogonoff.name/",
+    postLogoutRedirectUri: "http://sidt.dev.anton.strogonoff.name/auth",
     endpoints: {
-      "[HOME_URL_WEB_API]": "[CLIENTID_WEB_API_GUID]",
+      "": "7abc1508-6c60-4b3a-8e24-ddd623894bd0",
     },
   }
   constructor(private adal: AdalService) {
