@@ -20,6 +20,6 @@
      before_script:
      - pip install awscli
      script:
-     - aws s3 cp dist/ s3://$S3_BUCKET_NAME/ --recursive
+     - aws s3 cp dist/biotoken/ s3://$S3_BUCKET_NAME/ --recursive
      after_script:
      - rm -r dist
