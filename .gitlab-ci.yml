@@ -5,6 +5,8 @@
    build:
      stage: build
      image: node:latest
+     before_script:
+     - npm -g install "@angular/cli"
      script:
      - npm install
      - ng build --prod
