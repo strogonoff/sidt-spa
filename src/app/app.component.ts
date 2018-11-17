@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'bt-root',
+  template: `
+    <bt-stream-list></bt-stream-list>
+  `,
+  styles: [`
+  `],
 })
 export class AppComponent {
-  title = 'biotoken';
 }
