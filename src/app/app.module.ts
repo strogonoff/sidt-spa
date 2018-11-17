@@ -14,8 +14,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StreamListComponent } from './stream-list/stream-list.component';
-import { StreamDetailComponent } from './stream-detail/stream-detail.component';
-import { StreamResultsetComponent } from './stream-resultset/stream-resultset.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BuyTokenComponent } from './buy-token/buy-token.component';
 import { StreamRowComponent } from './stream-list/stream-row.component';
@@ -32,8 +30,6 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     StreamListComponent,
-    StreamDetailComponent,
-    StreamResultsetComponent,
     PageNotFoundComponent,
     BuyTokenComponent,
     StreamRowComponent,
