@@ -22,7 +22,7 @@ import { DataService } from '@bt/data.service';
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <mat-tab-group [selectedIndex]="selectedTab">
+      <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTab = $event">
         <mat-tab label="Requests">
           <p *ngIf="!stream.newDataAvailable && (requests | async)?.length < 1 && (responseSets | async)?.length < 1">No data is available yet!</p>
 
