@@ -103,6 +103,7 @@ export class DataService {
       const streams = this.storage.get('streams') || [];
       return of(streams.map(obj => Stream.fromResp(obj))).pipe(delay(100));
     }
+    return of([]).pipe(delay(100));
 
     // return this.http.get(`${ENDPOINT}/streams`).pipe(map((resp: any) => {
     //   console.debug("Getting streams");
@@ -121,6 +122,7 @@ export class DataService {
       const requests = this.storage.get(`requests-for-${streamName}`) || [];
       return of(requests.map(obj => Request.fromResp(obj))).pipe(delay(300));
     }
+    return of([]).pipe(delay(100));
   }
 
   getResponseSetsForStreamName(streamName: string): Observable<ResponseSet[]> {
@@ -128,6 +130,7 @@ export class DataService {
       const responses = this.storage.get(`responsesets-for-${streamName}`) || [];
       return of(responses.map(obj => ResponseSet.fromResp(obj))).pipe(delay(600));
     }
+    return of([]).pipe(delay(100));
   }
 
   getRequestCost(streamName: string, targetSampleSize: number): Observable<{ cost: number }> {
