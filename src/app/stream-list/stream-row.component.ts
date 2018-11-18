@@ -33,20 +33,22 @@ import { DataService } from '@bt/data.service';
                 <span class="notice"
                   *ngIf="stream.newDataAvailable && (requests | async)?.length < 1">Data available</span>
                 <span class="notice"
-                  *ngIf="(requests | async)?.length > 0">New data!</span>
+                  *ngIf="(requests | async)?.length > 0">New data</span>
                 <button
                   mat-stroked-button
                   color="primary"
                   (click)="onPlaceRequest()">
-                  Ask to buy
+                  Request
                 </button>
+              </div>
+              <div class="full-width" mat-line>
               </div>
             </mat-list-item>
 
             <mat-list-item
                 *ngFor="let request of requests | async; last as isLast">
               <div class="full-width" mat-line>
-                <span class="notice">Asked {{ request.targetSampleSize }}</span>
+                <span class="notice">From {{ request.targetSampleSize }} people</span>
                 <button
                   mat-stroked-button
                   [disabled]="true"
@@ -57,8 +59,7 @@ import { DataService } from '@bt/data.service';
                 <button
                   mat-stroked-button
                   (click)="selectedTab = 1"
-                  *ngIf="request.status == requestStatus.Fulfilled"
-                  color="primary">
+                  *ngIf="request.status == requestStatus.Fulfilled">
                   Fulfilled
                 </button>
               </div>
@@ -78,8 +79,7 @@ import { DataService } from '@bt/data.service';
                 <a
                   href="{{ responseSet.csvPath }}"
                   target="_blank"
-                  mat-stroked-button
-                  color="primary">
+                  mat-stroked-button>
                   View
                 </a>
               </div>
@@ -96,6 +96,9 @@ import { DataService } from '@bt/data.service';
   styles: [`
     mat-tab {
       padding-top: 1em;
+    }
+    mat-panel-title {
+      font-weight: bold;
     }
     .full-width.mat-line {
       display: flex;

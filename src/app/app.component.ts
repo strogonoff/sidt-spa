@@ -13,6 +13,7 @@ import { AdalService } from 'adal-angular4';
       flex: 1;
       display: flex;
       flex-flow: column nowrap;
+      align-items: center;
     }
   `],
 })

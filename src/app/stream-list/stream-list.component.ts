@@ -11,7 +11,7 @@ import { DataService } from '@bt/data.service';
 @Component({
   selector: 'bt-stream-list',
   template: `
-    <h1 class="mat-headline">Data streams</h1>
+    <h1 class="mat-headline">Wellness</h1>
 
     <mat-accordion class="list">
       <bt-stream-row
@@ -21,7 +21,11 @@ import { DataService } from '@bt/data.service';
         [stream]="stream"></bt-stream-row>
     </mat-accordion>
   `,
-  styles: []
+  styles: [`
+    :host {
+      padding-bottom: 2em;
+    }
+  `]
 })
 export class StreamListComponent implements OnInit {
   streamsObservable = new BehaviorSubject<Stream[]>([]);
