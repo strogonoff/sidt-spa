@@ -130,7 +130,10 @@ export class StreamRowComponent implements OnInit {
     }
 
     this.insureeTrackingShare = await this.getPercentage();
+    await this.updateStreamData();
+  }
 
+  async updateStreamData() {
     this.responseSets.next(await this.data.getResponseSetsForStreamName(this.stream.name).toPromise());
     this.requests.next(await this.data.getRequestsForStreamName(this.stream.name).toPromise());
   }
@@ -156,12 +159,14 @@ export class StreamRowComponent implements OnInit {
     dialogRef.afterClosed().subscribe((request: Request) => {
       if (request) {
         this.data.requestData(this.stream.name, request.targetSampleSize, request.spendTokens).
-        subscribe(data => {
+        subscribe(async (data) => {
           // Reset proof draft
           this.newRequest = new Request();
           this.newRequest.streamName = this.stream.name;
           this.newRequest.spendTokens = 0;
           this.newRequest.targetSampleSize = 0;
+
+          await this.updateStreamData();
         });
       }
     });

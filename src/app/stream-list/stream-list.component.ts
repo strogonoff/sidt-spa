@@ -1,7 +1,12 @@
+import { filter } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
+
 import { Stream } from '@bt/stream';
 import { DataService } from '@bt/data.service';
+
 
 @Component({
   selector: 'bt-stream-list',
@@ -22,12 +27,24 @@ export class StreamListComponent implements OnInit {
   streamsObservable = new BehaviorSubject<Stream[]>([]);
   selectedStream: null | Stream;
 
-  constructor(private data: DataService) {}
+  constructor(private data: DataService, private router: Router) {}
 
   ngOnInit() {
-    this.data.getStreams().subscribe(streams => {
-      this.streamsObservable.next(streams);
-    });
+    this.router.events.
+      pipe(filter(event => event instanceof ActivationEnd && event.snapshot.children.length == 0) ).
+      subscribe((event: ActivationEnd) => {
+        let data = event.snapshot.data;
+        if (data.useMockStorage) {
+          this.data.setUseMock(true);
+        } else {
+          this.data.setUseMock(false);
+        }
+        console.debug(data);
+
+        this.data.getStreams().subscribe(streams => {
+          this.streamsObservable.next(streams);
+        });
+      });
   }
 
   requestData(stream, confirmed) {

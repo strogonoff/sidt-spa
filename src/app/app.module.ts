@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AdalService, AdalInterceptor } from 'adal-angular4';
+import { StorageServiceModule } from 'angular-webstorage-service';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -31,6 +32,7 @@ import { AuthCallbackComponent } from './auth-callback.component';
 
 const appRoutes: Routes = [
   { path: '', component: StreamListComponent, canActivate: [AuthGuard] },
+  { path: 'demo', component: StreamListComponent, data: { useMockStorage: true } },
   { path: 'auth', component: AuthCallbackComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
@@ -49,6 +51,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
+    StorageServiceModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false }),
