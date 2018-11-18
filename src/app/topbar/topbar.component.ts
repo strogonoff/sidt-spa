@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'bt-topbar',
@@ -9,7 +9,10 @@ import { Component, OnInit } from '@angular/core';
           Biotoken
         </h1>
         <span class="token-balance">
-          <button mat-stroked-button>41 SIDT</button>
+          <button mat-stroked-button color="primary">41 SIDT</button>
+        </span>
+        <span class="logout">
+          <button mat-stroked-button (click)="logOut.emit(true)">Log out</button>
         </span>
       </mat-toolbar-row>
     </mat-toolbar>
@@ -35,6 +38,7 @@ import { Component, OnInit } from '@angular/core';
   `],
 })
 export class TopbarComponent implements OnInit {
+  @Output() logOut = new EventEmitter<boolean>();
 
   constructor() { }
 
