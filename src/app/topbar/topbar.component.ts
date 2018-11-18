@@ -12,7 +12,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
           <button mat-stroked-button color="primary">41 SIDT</button>
         </span>
         <span class="logout">
-          <button mat-stroked-button (click)="logOut.emit(true)">Log out</button>
+          <button mat-stroked-button (click)="signOut.emit(true)">Log out</button>
         </span>
       </mat-toolbar-row>
     </mat-toolbar>
@@ -38,7 +38,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   `],
 })
 export class TopbarComponent implements OnInit {
-  @Output() logOut = new EventEmitter<boolean>();
+  @Output() signOut = new EventEmitter<boolean>();
 
   constructor() { }
 
