@@ -50,8 +50,16 @@ import { DataService } from '@bt/data.service';
                 <button
                   mat-stroked-button
                   [disabled]="true"
+                  *ngIf="request.status == requestStatus.Pending"
                   color="primary">
                   Pending
+                </button>
+                <button
+                  mat-stroked-button
+                  (click)="selectedTab = 1"
+                  *ngIf="request.status == requestStatus.Fulfilled"
+                  color="primary">
+                  Fulfilled
                 </button>
               </div>
               <div class="full-width" mat-line>
@@ -67,11 +75,13 @@ import { DataService } from '@bt/data.service';
               *ngFor="let responseSet of responseSets | async; last as isLast">
               <div class="full-width" mat-line>
                 {{ responseSet.responderCount }} provided data
-                <button
+                <a
+                  href="{{ responseSet.csvPath }}"
+                  target="_blank"
                   mat-stroked-button
                   color="primary">
                   View
-                </button>
+                </a>
               </div>
               <div class="full-width" mat-line>
                 {{ responseSet.timestamp }}
@@ -166,7 +176,12 @@ export class StreamRowComponent implements OnInit {
           this.newRequest.spendTokens = 0;
           this.newRequest.targetSampleSize = 0;
 
-          await this.updateStreamData();
+          setTimeout(async () => {
+            await this.updateStreamData();
+          }, 300);
+          setTimeout(async () => {
+            await this.updateStreamData();
+          }, 5000);
         });
       }
     });
@@ -224,7 +239,6 @@ export class DataRequestDialog {
   targetSampleSizeChanged($event): void {
     console.debug(`Checking cost for ${event}`);
     this.dataSvc.getRequestCost(this.data.requestDraft.streamName, $event).subscribe(({ cost }) => {
-      console.debug(`Got ${cost}`);
       this.data.requestDraft.spendTokens = cost;
     });
   }

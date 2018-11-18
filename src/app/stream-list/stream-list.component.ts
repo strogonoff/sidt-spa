@@ -39,7 +39,6 @@ export class StreamListComponent implements OnInit {
         } else {
           this.data.setUseMock(false);
         }
-        console.debug(data);
 
         this.data.getStreams().subscribe(streams => {
           this.streamsObservable.next(streams);

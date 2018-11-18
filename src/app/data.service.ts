@@ -13,6 +13,7 @@ import { ResponseSet } from '@bt/response-set';
 
 const STORAGE_KEY = 'sidt-local';
 const ENDPOINT = '';
+const CSV_PATH = 'http://sidt.dev.anton.strogonoff.name/assets/dataset-steps.json';
 
 
 @Injectable({
@@ -60,7 +61,7 @@ export class DataService {
         id: Math.random().toString(36).substring(7),
         status: RequestStatus.Pending,
         streamName: streamName,
-        timestamp: new Date().toLocaleDateString('en-US'),
+        timestamp: `${new Date().toLocaleDateString('en-US')} ${new Date().toLocaleTimeString('en-US')}`,
         targetSampleSize: targetSampleSize,
         spendTokens: spendTokens,
       };
@@ -74,12 +75,14 @@ export class DataService {
         let idx = requests.indexOf(ourRequest);
         requests[idx].status = RequestStatus.Fulfilled;
 
+        this.storage.set(`requests-for-${streamName}`, requests);
+
         let responsesets = this.storage.get(`responsesets-for-${streamName}`) || [];
         let responseset = {
           requestId: request.id,
           responderCount: Math.floor(Math.random() * 1000),
-          timestamp: new Date().toLocaleDateString('en-US'),
-          csvPath: 'https://www.google.com/',
+          timestamp: `${new Date().toLocaleDateString('en-US')} ${new Date().toLocaleTimeString('en-US')}`,
+          csvPath: CSV_PATH,
         };
         responsesets.push(responseset);
 
@@ -90,9 +93,9 @@ export class DataService {
         if (ourStream) {
           ourStream.newDataAvailable = true;
         }
-      }, 3000);
+      }, 1500);
     }
-    return of({ ok: true }).pipe(delay(1000));
+    return of({ ok: true }).pipe(delay(100));
   }
 
   getStreams(): Observable<Stream[]> {
